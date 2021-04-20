@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang = "en">
+   <head></head>
+   <body>
+      
+      <h3>
+         <a href = "{{ url_for('admin') }}">HOME PAGE FOR ADMIN</a>
+      </h3>
+      
+      
+      <table>
+         <tbody>
+            {% for data in database %}
+               <tr>
+                  <td>{{ data.name }}</td>
+                  <td>{{ data.text }}</td>
+                  <td>{{ data.personality_score }}</td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+      
+   </body>
+</html>

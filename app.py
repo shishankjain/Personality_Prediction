@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Flask,render_template,url_for,request
+from flask import Flask,render_template,url_for,request, flash, redirect, 
 import pickle
 import spacy
 from spacy.lang.en.stop_words import STOP_WORDS
@@ -18,12 +18,12 @@ class database(db.Model):
     id=db.Column('user_id',db.Integer, primary_key=True)
     name = db.Column(db.String(20))
     text=db.Column(db.String(1000))
-    personality_score=db.Column(db.Integer(3))
+    personality_score=db.Column(db.Integer)
 
-def __init__(self, name, text, personality_score):
-    self.name=name
-    self.text=text
-    self.personality_score= personality_score
+    def __init__(self, name, text, personality_score):
+        self.name=name
+        self.text=text
+        self.personality_score= personality_score
 
 # load the model from disk
 nlp = spacy.load("en_core_web_sm")
@@ -90,7 +90,7 @@ def home():
 @app.route('/predict',methods=['POST'])
 def predict():
     if request.method == 'POST':
-        if not request.form['name'] or not request.form['city'] or not request.form['text']:
+        if not request.form['name'] or not request.form['message']:
             print('Please enter all the fields', error)
         else:
             message = request.form['message']
@@ -106,9 +106,10 @@ def predict():
     
                 score=((ie[1]+ns[1]+tf[0]+jp[0])/4)*100
                 score=int(round(score))
-                predicted_score=score
-            my_prediction=eval_string(message)
-            data=database(request.form['name'],request.form['text'],['score'])
+                return score
+            personality_score=eval_string(message)
+            my_prediction=personality_score
+            data=database(request.form['name'],request.form['message'],personality_score)
             db.session.add(data)
             db.session.commit()
             print('Record was successfully submitted')
@@ -117,6 +118,9 @@ def predict():
         
     return render_template('home.html',prediction = my_prediction)
 
+@app.route('/admin')
+def admin():
+    return render_template('admin.html',database=database.query.all())
 
 if __name__ == '__main__':
     db.create_all()
