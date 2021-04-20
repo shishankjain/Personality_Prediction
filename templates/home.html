@@ -27,14 +27,14 @@
 
 	<div class="container">
         <h1>Personality Prediction</h1>
-		<form action="{{ url_for('predict')}}" method="POST">
+		<form action="{{ url_for('predict')}}" method="POST" enctype="multipart/form-data">
 		<label for = "name">Name</label><br>
 		<input type = "text" name = "name" placeholder = "Name" /><br>
 		<p>Enter Your Summary Here</p>
 		<!-- <input type="text" name="comment"/> -->
 		<textarea placeholder="Enter your Text here...." name="message" rows="6" cols="50"></textarea>
-		<label for ="file"> Upload the resume</label><br>
-		<input type="file" name="upload" accept="application/pdf"/>
+		<label for ="upload"> Upload the resume</label><br>
+		<input type="file" name="upload" accept="application/pdf" />
 		<input type="submit" class="btn-info" value="predict">
 		
 		

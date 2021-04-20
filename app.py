@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Flask,render_template,url_for,request, flash, redirect, 
+from flask import Flask , render_template,url_for,request, flash, redirect
 import pickle
 import spacy
 from spacy.lang.en.stop_words import STOP_WORDS
@@ -7,27 +7,32 @@ import re
 import numpy as np
 from ipywidgets import widgets, interact
 from flask_sqlalchemy import SQLAlchemy
-
+import os
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import  FileStorage
 
 app = Flask(__name__)
 app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-
+app.config ['UPLOAD_FOLDER'] = "C:\\Users\\jshas\\Desktop\\Personality_Prediction\\Personality_Prediction\\static"
 db = SQLAlchemy(app)
 
 class database(db.Model):
     id=db.Column('user_id',db.Integer, primary_key=True)
     name = db.Column(db.String(20))
     text=db.Column(db.String(1000))
+    file1=db.Column(db.String(20))
     personality_score=db.Column(db.Integer)
 
-    def __init__(self, name, text, personality_score):
+    def __init__(self, name, text, file1, personality_score):
         self.name=name
         self.text=text
+        self.file1=file1
         self.personality_score= personality_score
-
+        
 # load the model from disk
 nlp = spacy.load("en_core_web_sm")
 
+upload_location="C:\\Users\\jshas\\Desktop\\Personality_Prediction\\Personality_Prediction\\static"
 
 def tokeniser(sentence):
  
@@ -109,7 +114,9 @@ def predict():
                 return score
             personality_score=eval_string(message)
             my_prediction=personality_score
-            data=database(request.form['name'],request.form['message'],personality_score)
+            f=request.files['upload']
+            f.save(os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename)))
+            data=database(request.form['name'],request.form['message'],f, personality_score)
             db.session.add(data)
             db.session.commit()
             print('Record was successfully submitted')
