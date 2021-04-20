@@ -6,6 +6,14 @@ from spacy.lang.en.stop_words import STOP_WORDS
 import re
 import numpy as np
 from ipywidgets import widgets, interact
+from flask_sqlalchemy import SQLAlchemy
+
+
+app = Flask(__name__)
+app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+
+db = SQLAlchemy(app)
+
 
 
 # load the model from disk
@@ -64,7 +72,7 @@ with open('LR_clf_TF_kaggle.pickle', 'rb') as f:
 
     
 
-app = Flask(__name__)
+
 
 @app.route('/')
 def home():
