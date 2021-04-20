@@ -14,7 +14,16 @@ app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 
 db = SQLAlchemy(app)
 
+class database(db.Model):
+    id=db.Column('user_id',db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
+    text=db.Column(db.String(1000))
+    personality_score=db.Column(db.Integer(3))
 
+def __init__(self, name, text, personality_score):
+    self.name=name
+    self.text=text
+    self.personality_score= personality_score
 
 # load the model from disk
 nlp = spacy.load("en_core_web_sm")
@@ -81,7 +90,10 @@ def home():
 @app.route('/predict',methods=['POST'])
 def predict():
     if request.method == 'POST':
-        message = request.form['message']
+        if not request.form['name'] or not request.form['city'] or not request.form['text']:
+            print('Please enter all the fields', error)
+        else:
+            message = request.form['message']
         if(len(message)>10):
             def eval_string(my_post):
                 c = cv.transform([tokeniser(my_post)])
@@ -93,10 +105,13 @@ def predict():
                 jp = lr_jp.predict_proba(x).flatten()
     
                 score=((ie[1]+ns[1]+tf[0]+jp[0])/4)*100
-                
-                print(int(round(score)))
-                
+                score=int(round(score))
+                predicted_score=score
             my_prediction=eval_string(message)
+            data=database(request.form['name'],request.form['text'],['score'])
+            db.session.add(data)
+            db.session.commit()
+            print('Record was successfully submitted')
         else:
             my_prediction=3
         
@@ -104,5 +119,6 @@ def predict():
 
 
 if __name__ == '__main__':
-	app.run(debug=True)
+    db.create_all()
+    app.run(debug=True)
 
