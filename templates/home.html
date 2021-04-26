@@ -40,27 +40,12 @@
 		
 	</form>
 	<div class="my_prediction">
-	{% if prediction == 1 %}
-	<h1 style="color:#008000;"><strong>Positive</strong></h1>
-	<span style='font-size:100px;'>&#128522;</span>
-
-	{% elif prediction == 0%}
-	<h1 style="color:#FF0000;"><strong>Negative</strong></h1>
-	<span style='font-size:100px;'>&#128545;</span>
 	
-	{% elif prediction == 2%}
-	<h2 style="color:white;"><strong>Neutral</strong></h2>
-	<span style='font-size:100px;'>&#128528;</span>
-	
-	{% elif prediction == 3%}
+	{% if prediction == 3%}
         <h2 style="color:red;"><strong>Enter text atleast greater than 3 and Try Again..!!!</strong></h2>
 	
 	{% endif %}
 	</div>
 </div>
-
-	
-	
-
 </body>
 </html>
