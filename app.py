@@ -6,7 +6,7 @@ from spacy.lang.en.stop_words import STOP_WORDS
 import re
 from pyresparser import ResumeParser
 import numpy as np
-
+#from flask_bcrypt import bcrypt
 from flask_sqlalchemy import SQLAlchemy
 import os
 from werkzeug.utils import secure_filename
@@ -16,7 +16,7 @@ app = Flask(__name__)
 app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config ['UPLOAD_FOLDER'] = "G:\\NEWW\\Personality_Prediction"
 db = SQLAlchemy(app)
-
+#bcrypt= Bcrypt(app)
 
 #SKILLS REQUIRED in SET
 text={'Python','Machine Learning', 'Java', 'SQL', 'C'}
@@ -27,7 +27,7 @@ req_experience=[0,2]
 #CREATING DATABASE table name=database
 class database(db.Model):
     id=db.Column('user_id',db.Integer, primary_key=True)
-    rank=db.Column(db.Integer)
+    #rank=db.Column(db.Integer)
     name = db.Column(db.String(20))
     text=db.Column(db.String(1000))
     personality_score=db.Column(db.Integer)
@@ -35,8 +35,8 @@ class database(db.Model):
     experience_score=db.Column(db.Integer)
     total_score=db.Column(db.Integer)
 
-    def __init__(self,rank, name, text, personality_score, skills_score, experience_score, total_score):
-        self.rank=rank
+    def __init__(self, name, text, personality_score, skills_score, experience_score, total_score):
+        #self.rank=rank
         self.name=name
         self.text=text
         self.personality_score= personality_score
@@ -152,10 +152,9 @@ def predict():
             candidate_total=experience_score+skills_score+(personality_score*0.2)
             experience_score=experience_score*2.5
             skills_score=skills_score*2.5
-            candidates = database.query.order_by(database.total_score._desc()).all() #fetch them all in one query
-            for (rank, database) in enumerate(candidates):
-                database.rank = rank + 1 #plus 1 cause enumerate starts from zero
-            data=database(rank,request.form['name'],request.form['message'], personality_score,skills_score, experience_score,candidate_total)
+            # candidates = database.query.order_by(database.total_score.desc()).all() #fetch them all in one query
+            # rank=candidates.id
+            data=database(request.form['name'],request.form['message'], personality_score,skills_score, experience_score,candidate_total)
             db.session.add(data)
             db.session.commit()
             print('Record was successfully submitted')
@@ -186,7 +185,7 @@ def predict():
 
 @app.route('/admin')
 def admin():
-    return render_template('admin.html',database=database.query.all())
+    return render_template('admin.html',database=database.query.order_by(database.total_score.desc()).all())
 
 if __name__ == '__main__':
     db.create_all()
