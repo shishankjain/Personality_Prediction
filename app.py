@@ -112,7 +112,7 @@ def home():
 @app.route('/predict',methods=['POST'])
 def predict():
     if request.method == 'POST':
-        if not request.form['name'] or not request.form['message']:
+        if not request.form['fname'] or not request.form['message']:
             print('Please enter all the fields', error)
         else:
             message = request.form['message']
@@ -154,7 +154,7 @@ def predict():
             skills_score=skills_score*2.5
             # candidates = database.query.order_by(database.total_score.desc()).all() #fetch them all in one query
             # rank=candidates.id
-            data=database(request.form['name'],request.form['message'], personality_score,skills_score, experience_score,candidate_total)
+            data=database(request.form['fname'],request.form['message'], personality_score,skills_score, experience_score,candidate_total)
             db.session.add(data)
             db.session.commit()
             print('Record was successfully submitted')
