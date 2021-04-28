@@ -3,11 +3,117 @@
 <head>
   <meta charset="UTF-8">
   <title>ML API</title>
+  <style>
+      
+      p{
+          text-align: center;
+          margin-right: 3%;
+          padding-top: 0%;
+      }
+      h2{
+          text-align: center;
+          font-style: italic;
+      }
+      h1{
+          color:cadetblue;
+          margin-left: 150px;
+      }
+      .header{
+          text-align: center;
+          font-size: x-large;
+          font-family: 'Poppins', sans-serif;
+          margin-top: 70px;
+          font-style: oblique;
+          }
+          .font-weight-bold{
+              text-align: center;
+              color: darkgoldenrod;
+              margin-bottom: 60px;
+            }
+            input[type=text]{
+                font-size: 17px;
+                padding: 8px 8px 8px;
+                display: inline-block;
+                border-radius: 4px;
+                box-sizing:border-box;
+                text-align: center;
+            }
+            form{
+                text-align: center;
+                margin-left: 20px;
+                font-size: 25px;
+                
+                color: rgb(4, 85, 85);;
+            }
+            textarea{
+                border-radius: 4px;
+                font-size: 17px;
+                box-sizing: border-box;
+                display: inline-block;
+                margin-left: 140px;
+                padding: 8px 8px 8px;
+            }
+            .btn-info{
+                
+  background-color: #026a9b;
+  border: none;
+  color: white;
+  padding: 12px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  box-shadow: 0 9px rgb(129, 220, 243);
+  outline: none;
+  border-radius: 15px;
+  margin-left: 250px;
+            }
+            .btn-info:hover {background-color: #1dc9c9}
+
+.btn-info:active {
+  background-color: #807306;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+.header,body{
+    width: 100%;
+
+    
+	background-image: linear-gradient(rgba(0,168,255,0.3), rgba(0,168,255,0.30)), url('../images/img.jpg');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	font-family: 'Poppins', sans-serif;
+	clip-path: skew(100% 0%, 100% 0%, 0 0);
+	position: relative;
+
+}
+.container{
+    font-size: 17px;
+    margin-right: 150px;
+    
+
+}
+.bttn{
+    background-color:  #026a9b;
+    color:white;
+    margin-left: 150px;
+    width: 13%;
+    
+    
+}
+
+  
+           
+ 
+  </style>
   <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
   
 
 	<title>resume ranker</title>
@@ -18,34 +124,41 @@
 <body> 
 
 
-	<header>
-		<div id="brandname">
+	
+		<div class="header" id="brandname">
 			   Machine Learning App with Flask
 		</div>
 
 	</header>
 
 	<div class="container">
-        <h1>Personality Prediction</h1>
+        <h1 class="font-weight-bold">Personality Prediction</h1>
 		<form action="{{ url_for('predict')}}" method="POST" enctype="multipart/form-data">
-		<label for = "name">Name</label><br>
-		<input type = "text" name = "name" placeholder = "Name" /><br>
-		<p>Enter Your Summary Here</p>
+		<label for = "fname">Name :  </label>
+		<input type = "text" name = "fname"  placeholder = "Enter your full name.." />
+		<p style="color: rgb(4, 85, 85);">Enter Your Summary Here(↓) !</p>
 		<!-- <input type="text" name="comment"/> -->
-		<textarea placeholder="Enter your Text here...." name="message" rows="6" cols="50"></textarea>
-		<label for ="upload"> Upload the resume</label><br>
-		<input type="file" name="upload" accept="application/pdf" />
-		<input type="submit" class="btn-info" value="predict">
+		<textarea id="txtarea" placeholder="Enter your Text here...." name="message" rows="4" cols="50"></textarea>
+        <br>
+        <div class="container">
+		<label for ="upload">(↓Upload your resume)</label><br>
+        </div>
+		
+        <input type="file" class="bttn" name="upload" accept="application/pdf" />
+        
+        
+		<input type="submit" class="btn-info" value="Predict">
 		
 		
 	</form>
 	<div class="my_prediction">
+        {% if prediction == 3%}
 	
-	{% if prediction == 3%}
-        <h2 style="color:red;"><strong>Enter text atleast greater than 3 and Try Again..!!!</strong></h2>
+        <h2 style="color:rgb(158, 18, 95); margin-left: 200px;"><strong>Enter text atleast greater than 3 and Try Again..!!!</strong></h2>
+        {% endif %}
 	
-	{% endif %}
 	</div>
+    
 </div>
 </body>
 </html>
