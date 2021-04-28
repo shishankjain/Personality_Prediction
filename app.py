@@ -12,7 +12,7 @@ import os
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
 
-app = Flask(__name__, template_folder='./templates')
+app = Flask(__name__)
 app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config ['UPLOAD_FOLDER'] = "G:\\NEWW\\Personality_Prediction"
 db = SQLAlchemy(app)
