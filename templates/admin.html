@@ -1,27 +1,79 @@
 <!DOCTYPE html>
-<html lang = "en">
-   
+<!-- saved from url=(0043)file:///C:/Users/deepi/Downloads/admin.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+      <style>
+         table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  
+}
+
+td, th {
+  border: 3px solid #050505;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+.css-serial {
+  counter-reset: serial-number;  
+}
+
+.css-serial td:first-child:before {
+  counter-increment: serial-number; 
+  content: counter(serial-number);  
+}
+legend{
+            text-align: center;
+            color:black;
+            background-color:
+            rgb(145, 238, 241);
+        }
+        body{
+                background-color: rgb(232, 252, 250);
+            }
+            th{
+              background-color: rgb(145, 238, 241);;
+            }
+
+      </style>
+   </head>
    <body>
       
-      <h3>
-         <a href = "{{ url_for('admin') }}">HOME PAGE FOR ADMIN</a>
-      </h3>
+      <legend><h1>
+         <a href="file:///C:/Users/deepi/Downloads/%7B%7B%20url_for(&#39;admin&#39;)%20%7D%7D">HOME PAGE FOR ADMIN</a>
+      </h1></legend>
       
       
-      <table>
+      
+            
+               
+           
+         <table class="css-serial">
          <tbody>
-            {% for data in database %}
-               <tr>
+            <tr>
+               <th>Rank</th>
+               <th>Name</th>
+               <th>Profile Summary</th>
+               <th>Personality Score</th>
+               <th>Skills Score</th>
+               <th>Experience Score</th>
+               <th>Total Score</th>
+            </tr><tr>
+               {% for data in database %}
+                  <td></td>
                   <td>{{ data.name }}</td>
                   <td>{{ data.text }}</td>
                   <td>{{ data.personality_score }}</td>
                   <td>{{data.skills_score}}</td>
                   <td>{{data.experience_score}}</td>
                   <td>{{data.total_score}}</td>
-               </tr>
-            {% endfor %}
-         </tbody>
+               </tr></tbody>
+               {% endfor %}
       </table>
       
-   </body>
-</html>
+   
+</body></html>
