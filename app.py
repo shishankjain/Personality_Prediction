@@ -27,15 +27,27 @@ req_experience=[0,2]
 #CREATING DATABASE table name=database
 class database(db.Model):
     id=db.Column('user_id',db.Integer, primary_key=True)
-    #rank=db.Column(db.Integer)
     name = db.Column(db.String(20))
     text=db.Column(db.String(1000))
     personality_score=db.Column(db.Integer)
     skills_score=db.Column(db.Integer)
     experience_score=db.Column(db.Integer)
     total_score=db.Column(db.Integer)
+    college=db.Column(db.String(100))
+    email=db.Column(db.String(100))
+    phone_number=db.Column(db.String(100))
+    introversion=db.Column(db.Integer)
+    extroversion=db.Column(db.Integer)
+    sensors=db.Column(db.Integer)
+    intuitives=db.Column(db.Integer)
+    thinkers=db.Column(db.Integer)
+    feelers=db.Column(db.Integer)
+    judgers=db.Column(db.Integer)
+    perceivers=db.Column(db.Integer)
 
-    def __init__(self, name, text, personality_score, skills_score, experience_score, total_score):
+
+    def __init__(self, name, text, personality_score, skills_score, experience_score, total_score,college,
+    email, phone_number,introversion,extroversion,sensors,intuitives,thinkers,feelers,judgers,perceivers):
         #self.rank=rank
         self.name=name
         self.text=text
@@ -43,6 +55,17 @@ class database(db.Model):
         self.experience_score=experience_score
         self.skills_score=skills_score
         self.total_score=total_score
+        self.college=college
+        self.email=email
+        self.phone_number=phone_number
+        self.introversion=introversion
+        self.extroversion=extroversion
+        self.sensors=sensors
+        self.intuitives=intuitives
+        self.thinkers=thinkers
+        self.feelers=feelers
+        self.judgers=judgers
+        self.perceivers=perceivers
 
 
         
@@ -125,16 +148,41 @@ def predict():
                 ns = lr_ns.predict_proba(x).flatten()
                 tf = lr_tf.predict_proba(x).flatten()
                 jp = lr_jp.predict_proba(x).flatten()
-    
-                score=((ie[1]+ns[1]+tf[0]+jp[0])/4)*100
-                score=int(round(score))
+
+                score=[0,0,0,0,0,0,0,0,0]
+                score[0]=((ie[1]+ns[1]+tf[0]+jp[0])/4)*100
+                #Calculated all the 8 personality types
+                #introvert
+                score[1]=ie[0]*100
+                #extrovert
+                score[2]=ie[1]*100
+                # intuitive
+                score[3]=ns[0]*100
+                #sensor
+                score[4]=ns[1]*100
+                # thinker
+                score[5]=tf[0]*100
+                # feeler
+                score[6]=tf[1]*100
+                # judger
+                score[7]=jp[0]*100
+                # perciever
+                score[8]=jp[1]*100
+
                 return score
-            personality_score=eval_string(message)
+            scores_list=eval_string(message)
+            personality_score=scores_list[0]
+            personality_score=int(round(personality_score))
             my_prediction=personality_score
             f=request.files['upload']
             f.save(os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename)))
             resume_data = ResumeParser(f.filename).get_extracted_data()
             print(resume_data)
+
+            #extracting data from resume
+            college=(resume_data.get("college"))
+            email=(resume_data.get("email"))
+            mobilenumber=(resume_data.get("mobile_number"))
             skills=(resume_data.get("skills"))
             experience=resume_data.get("total_experience")
             
@@ -154,7 +202,17 @@ def predict():
             skills_score=skills_score*2.5
             # candidates = database.query.order_by(database.total_score.desc()).all() #fetch them all in one query
             # rank=candidates.id
-            data=database(request.form['fname'],request.form['message'], personality_score,skills_score, experience_score,candidate_total)
+            #GETTING PERSONALITY TYPE SCORES
+            introvert=(int(round(scores_list[1])))
+            extrovert=(int(round(scores_list[2])))
+            intuitive=(int(round(scores_list[3])))
+            sensor=(int(round(scores_list[4])))
+            thinker=(int(round(scores_list[5])))
+            feeler=(int(round(scores_list[6])))
+            judger=(int(round(scores_list[7])))
+            perciever=(int(round(scores_list[8])))
+            data=database(request.form['fname'],request.form['message'], personality_score,skills_score, experience_score,
+            candidate_total,college,email,mobilenumber,introvert,extrovert,sensor, intuitive, thinker, feeler, judger, perciever)
             db.session.add(data)
             db.session.commit()
             print('Record was successfully submitted')
@@ -162,7 +220,7 @@ def predict():
         else:
             my_prediction=3
         
-    return render_template('home.html',predicton=my_prediction)
+    return "YOUR RECORD WAS SUCESSFULLY SUBMITTED"
 
 
 
@@ -186,6 +244,11 @@ def predict():
 @app.route('/admin')
 def admin():
     return render_template('admin.html',database=database.query.order_by(database.total_score.desc()).all())
+
+@app.route('/info/<name1>',methods=['GET','POST'])
+def info(name1):
+   
+    return render_template('info.html',data1=database.query.filter_by(id=name1).first())
 
 if __name__ == '__main__':
     db.create_all()
