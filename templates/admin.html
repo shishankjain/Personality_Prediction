@@ -65,7 +65,7 @@ legend{
             </tr><tr>
                {% for data in database %}
                   <td></td>
-                  <td>{{ data.name }}</td>
+                  <td><a href=info/{{data.id}}>{{ data.name }}</a></td>
                   <td>{{ data.text }}</td>
                   <td>{{ data.personality_score }}</td>
                   <td>{{data.skills_score}}</td>
