@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <style>
+            img{
+               
+               float: right;
+               margin-right: 40px;
+               margin-top: 30px;
+               margin-bottom: 30px;
+            }
+         </style>
+            </head>
+
+            <img src="{{url_for('static', filename='personality-types.png')}}" alt="img" width="650" height="550">
+            
+            <body style="background-color:#8adeff;">
+          <h4>Name: </h4>
+          <p>{{data1.name}}</p>
+          <h4>Email: </h4>
+          <p>{{data1.email}}</p>
+          
+          <h4>Phone Number: </h4>
+          <p>{{data1.phone_number}}</p>
+          
+          <h4>College: </h4>
+          <p>{{data1.College}}</p>
+          
+          <br>
+          <h2>PERSONALITY SCORES</h2>
+          <table>
+            <tbody>
+               <tr>
+                  <th>Personality Type</th>
+                  <th>Score</th>
+               </tr><tr>
+                    <td>Introvert</td>
+                     <td>{{data1.introversion}}</td>
+                  </tr><tr>
+                    <td>Extrovert</td>
+                     <td>{{data1.extroversion}}</td>
+                  </tr><tr>
+                    <td>Sensor</td>
+                     <td>{{data1.sensors}}</td>
+                  </tr><tr>
+                    <td>Intuitive</td>
+                     <td>{{data1.intuitives}}</td>
+                  </tr><tr>
+                    <td>Thinker</td>
+                     <td>{{data1.thinkers}}</td>
+                  </tr><tr>
+                    <td>Feeler</td>
+                     <td>{{data1.feelers}}</td>
+                  </tr><tr>
+                    <td>Judger</td>
+                     <td>{{data1.judgers}}</td>
+                  </tr><tr>
+                    <td>Perceivers</td>
+                     <td>{{data1.introversion}}</td>
+                  </tr></tbody>
+         </table>
+          <!-- <h4>Introvert </h4>
+          <p>{{data1.introversion}}</p>
+          <br>
+          <h4>Extrovert </h4>
+          <p>{{data1.extroversion}}</p>
+          <br>
+          <h4>Sensor </h4>
+          <p>{{data1.sensors}}</p>
+          <br>
+          <h4>Intuitive </h4>
+          <p>{{data1.intuitives}}</p>
+          <br>
+          <h4>Thinkers </h4>
+          <p>{{data1.thinkers}}</p>
+          <br>
+          <h4>Feelers</h4>  
+          <p>{{data1.feelers}}</p>  
+          <br>      
+          <h4>Judgers</h4>  
+          <p>{{data1.judgers}}</p>   
+          <br> 
+          <h4>Percievers</h4>  
+          <p>{{data1.percievers}}</p>     -->
+        </body>
+    </html>
